@@ -1,4 +1,4 @@
-# DataBootCamp-Project-3
+# DataBootCamp-Project-3 (Econ for Dummies)
 Group 6: Erik Dubec, Lee Taylor, Raphael Vasquez, Yang Yang
 
 Objectives: 
