@@ -3,6 +3,7 @@ Group 6: Erik Dubec, Lee Taylor, Raphael Vasquez, Yang Yang
 
 Objectives: 
 - Provide an open ended data inferface for anyone to draw logical conclusion from economic data.
+- Provide information in a manner where people can make policy decisions, or get ready for more californians to drive on their streets.
 
 Project requirements and our goals to meet them:
 - Languages required
