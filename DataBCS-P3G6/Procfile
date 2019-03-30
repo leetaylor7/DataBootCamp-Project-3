@@ -1,0 +1,1 @@
+web: gunicorn dbcsp3.app:app

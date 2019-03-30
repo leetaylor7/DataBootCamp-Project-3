@@ -1,0 +1,1 @@
+FLASK_APP=dbcsp3/app.py flask run
