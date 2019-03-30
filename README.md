@@ -11,7 +11,7 @@ Project requirements and our goals to meet them:
     - HTML/CSS (Lee Taylor, Raphael Vasquez)
     - JavaScript (Lee Taylor, Raphael Vasquez)
     - MySQL (Erik Dubec, Yang Yang)
-    - A module we have not used yet.
+    - A module we have not used yet (SAS).
    Uses of required languages:
     - Python for data transformation and JSON calls
     - HTML/CSS for dashboard framework
