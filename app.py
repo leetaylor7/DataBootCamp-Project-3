@@ -1,6 +1,6 @@
 # import necessary libraries
 from flask import Flask, render_template
-import econdatapull
+import API_get
 
 #Imports all dependencies
 import pandas as pd
