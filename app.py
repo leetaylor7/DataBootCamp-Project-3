@@ -1,11 +1,30 @@
-# imports
-from flask import Flask, jsonify
-import API_get
+# import necessary libraries
+from flask import Flask, render_template
+import econdatapull
+
+#Imports all dependencies
+import pandas as pd
+import datetime
+import json
+import requests
+from sqlalchemy import create_engine, inspect, Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, Float, Date 
+Base = declarative_base()
+import sqlite3
+from sqlalchemy.orm import Session
 
 
+# create instance of Flask app
 app = Flask(__name__)
 
 # flask route to update database
+@app.route("/")
+def index():
+
+    return render_template("index.html")
+
+
 @app.route('/api/update')
 def updateAPI():
     API_get.updateDB()
