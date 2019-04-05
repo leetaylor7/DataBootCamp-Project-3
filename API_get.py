@@ -10,6 +10,9 @@ from config import BEA_GDP_url
 from config import BEA_pop_url
 # REPLACE 'WILDCARD' with 51, 52, 53
 
+# JSON for per year change over year/state, empty at start, need to run updateDB to get values
+yearly_change_dict = {}
+
 def updateDB():
     # BEA_GDP: 
     # note that value in millions of 2012 dollars
@@ -73,6 +76,29 @@ def updateDB():
     conn = engine.connect()
 
     DB_DF.to_sql(name = 'info_by_year_state', con = conn, if_exists = 'replace')
+
+    # update yearly_change_dict using DB_dict
+    # updating the structure of y_c_d to be similar to DB_dict
+    years = list(DB_dict.keys())
+    for i in range(len(years)):
+        yearly_change_dict[years[i]] = {}
+        states = list(DB_dict[years[i]].keys())
+        for state in states:
+            if (i > 0):
+                yearly_change_dict[years[i]][state] = {
+                    'GDP Change': DB_dict[years[i]][state]['GDP (millions of dollars)'] - DB_dict[years[i]][state]['GDP (millions of dollars)'],
+                    'Personal Dist Income Change': DB_dict[years[i]][state][categories[0]] - DB_dict[years[i]][state][categories[0]],
+                    'Population Change': DB_dict[years[i]][state][categories[1]] - DB_dict[years[i]][state][categories[1]],
+                    'Personal Dist Income Per Capita Change': DB_dict[years[i]][state][categories[2]] - DB_dict[years[i]][state][categories[2]]
+                }
+                # if this is the first year, change should be = entry
+            else:
+                yearly_change_dict[years[i]][state] = {
+                    'GDP Change': DB_dict[years[i]][state]['GDP (millions of dollars)'],
+                    'Personal Dist Income Change': DB_dict[years[i]][state][categories[0]],
+                    'Population Change': DB_dict[years[i]][state][categories[1]],
+                    'Personal Dist Income Per Capita Change': DB_dict[years[i]][state][categories[2]]
+                }
 
     # delete this once Yang's code is done, no return statement is necessary in
     # this function
