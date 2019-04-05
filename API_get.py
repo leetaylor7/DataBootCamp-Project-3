@@ -86,10 +86,10 @@ def updateDB():
         for state in states:
             if (i > 0):
                 yearly_change_dict[years[i]][state] = {
-                    'GDP Change': DB_dict[years[i]][state]['GDP (millions of dollars)'] - DB_dict[years[i]][state]['GDP (millions of dollars)'],
-                    'Personal Dist Income Change': DB_dict[years[i]][state][categories[0]] - DB_dict[years[i]][state][categories[0]],
-                    'Population Change': DB_dict[years[i]][state][categories[1]] - DB_dict[years[i]][state][categories[1]],
-                    'Personal Dist Income Per Capita Change': DB_dict[years[i]][state][categories[2]] - DB_dict[years[i]][state][categories[2]]
+                    'GDP Change': DB_dict[years[i]][state]['GDP (millions of dollars)'] - DB_dict[years[i - 1]][state]['GDP (millions of dollars)'],
+                    'Personal Dist Income Change': DB_dict[years[i]][state][categories[0]] - DB_dict[years[i - 1]][state][categories[0]],
+                    'Population Change': DB_dict[years[i]][state][categories[1]] - DB_dict[years[i - 1]][state][categories[1]],
+                    'Personal Dist Income Per Capita Change': DB_dict[years[i]][state][categories[2]] - DB_dict[years[i - 1]][state][categories[2]]
                 }
                 # if this is the first year, change should be = entry
             else:
