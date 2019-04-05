@@ -1,5 +1,5 @@
 # import necessary libraries
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 import API_get
 
 #Imports all dependencies
@@ -9,7 +9,7 @@ import json
 import requests
 from sqlalchemy import create_engine, inspect, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Float, Date 
+from sqlalchemy import Column, Integer, String, Float, Date
 Base = declarative_base()
 import sqlite3
 from sqlalchemy.orm import Session
