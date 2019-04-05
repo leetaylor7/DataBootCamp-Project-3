@@ -53,10 +53,10 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="http://127.0.0.1:5000/">Summary <span class="sr-only">(current)</span></a></li>
+            <li><a href="http://127.0.0.1:5000/">Summary <span class="sr-only">(current)</span></a></li>
             <li><a href="http://127.0.0.1:5000/barcharts">Bar Charts</a></li>
             <li><a href="http://127.0.0.1:5000/Map">Map Chart</a></li>
-            <li><a href="http://127.0.0.1:5000/plotly">Plotly</a></li>
+            <li class="active"><a href="http://127.0.0.1:5000/plotly">Plotly</a></li>
           </ul>
         <!-- /.navbar-collapse -->
       </div>
@@ -117,17 +117,17 @@
     </nav>
 
     <div class="container">
-        <h3 class="text-center" id="chartName">Chart Name</h3>
+        <h3 class="text-center" id="chartName">Plotly Comparison</h3>
         <div class="row">
           <div class="jumbotron">
             <div class="thumbnail">
-            <div class="caption">
-            <h1>Our findings summary</h1>
-          </div>
-          <div>
-            <p>This is where we will type in our summary findings.</p>
-          </div>
+            <div id="plotly"></div>
+              <!-- <img src="https://i.ytimg.com/vi/tntOCGkgt98/maxresdefault.jpg" alt="..."> -->
+              <div class="caption">
+                <h3>Sources:</h3>
+                <p id="citations">Insert Source Here</p>
                 <!-- <p><a href="#" class="btn btn-primary" role="button">Update</a></p> -->
+              </div>
             </div>
           </div>
         </div>
