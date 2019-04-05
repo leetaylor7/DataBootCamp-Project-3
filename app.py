@@ -28,7 +28,7 @@ def index():
 @app.route('/api/update')
 def updateAPI():
     API_get.updateDB()
-    pass
+    return render_template("index.html")
 
 # # hacky way to possibly get the JSON from API_get
 # # this route is more related to what Yang's doing but I figured I'd put this here
