@@ -17,6 +17,59 @@ Project requirements and our goals to meet them:
     - HTML/CSS for dashboard framework
     - JavaScript and {Raphel's suggested module} for graphical display
     
+Regions (BEA data):
+- New England Region
+    - ME
+    - NH
+    - VT
+    - MA
+    - CT
+    - RI
+- Mideast Region
+    - NY
+    - PA
+    - NJ
+    - DE
+    - MD
+    - DC
+- Great Lakes Region
+    - WI
+    - MI
+    - IL
+    - IN
+    - OH
+- Plains Region
+    - ND
+    - MN
+    - SD
+    - IA
+    - NE
+    - KS
+    - MO
+- Southeast Region
+    - WV
+    - KY
+    - VA
+    - TN
+    - NC
+    - AR
+    - MS
+    - AL
+    - GA
+    - SC
+    - LA
+    - FL
+- Southwest Region
+    - AZ
+    - NM
+    - OK
+    - TX
+- Rocky Mountain Region
+    - MT
+    - ID
+    - WY
+    - UT
+    - CO
 Datasets:
 - FRED 
 - BLS
