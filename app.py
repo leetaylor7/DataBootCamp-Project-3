@@ -58,7 +58,7 @@ def getAPI():
 # be sure to run the update route before trying this or you'll get a blank JSON
 @app.route('/api/get_change')
 def getAPIChange():
-    return jsonify(API_get.yearly_change_dict)
+    return jsonify([API_get.yearly_change_dict_states, API_get.yearly_change_dict_regions])
 
 if __name__ == '__main__':
     app.run(debug = True)
