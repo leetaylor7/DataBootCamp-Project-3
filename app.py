@@ -50,10 +50,13 @@ def plotly():
 # # this route is more related to what Yang's doing but I figured I'd put this here
 # # for test purposes (note that it may not actually work)
 # # be sure to delete this route (or modify it) to not use updateDB, since this isn't really what the function's for
-@app.route('/api/get')
+@app.route('/api/get_state')
 def getAPI():
     # return jsonify(API_get.updateDB())
-    return jsonify([sql_to_json.DB_dict, sql_to_json.DB_r_dict])
+    return jsonify(sql_to_json.DB_dict)
+@app.route('/api/get_region')
+def getAPIr():
+    return jsonify(sql_to_json.DB_r_dict)
 
 # be sure to run the update route before trying this or you'll get a blank JSON
 @app.route('/api/get_change')
