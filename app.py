@@ -13,7 +13,7 @@ from sqlalchemy import Column, Integer, String, Float, Date
 Base = declarative_base()
 import sqlite3
 from sqlalchemy.orm import Session
-
+import sql_to_json
 
 # create instance of Flask app
 app = Flask(__name__)
@@ -52,7 +52,8 @@ def plotly():
 # # be sure to delete this route (or modify it) to not use updateDB, since this isn't really what the function's for
 @app.route('/api/get')
 def getAPI():
-    return jsonify(API_get.updateDB())
+    # return jsonify(API_get.updateDB())
+    return jsonify(sql_to_json.DB_dict)
 
 # be sure to run the update route before trying this or you'll get a blank JSON
 @app.route('/api/get_change')
