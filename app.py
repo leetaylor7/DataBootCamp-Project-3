@@ -22,21 +22,24 @@ app = Flask(__name__)
 # also sets up the landing page
 # this way we always have updated data when we land
 @app.route("/")
-def index():
 def updateAPI():
     API_get.updateDB()
+
     return render_template("index.html")
 
-# sets up the links to the various html pages
+# sets up the links to the various html files
 @app.route("/barcharts")
+def barcharts():
 
     return render_template("barcharts.html")
 
-@app.route("/map")
-
+@app.route("/Map")
+def map():
+    
     return render_template("map.html")
 
 @app.route("/plotly")
+def plotly():
 
     return render_template("plotly.html")
 
