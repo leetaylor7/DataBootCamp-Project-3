@@ -39,7 +39,7 @@ def updateDB():
 
     # make a list of the regions to set them in another table
     regions = [
-        'NewEngland', 'Mideast', 'GreatLakes', 'Plains', 'Southeast', 'Southwest', 'RockyMountain'
+        'NewEngland', 'Mideast', 'GreatLakes', 'Plains', 'Southeast', 'Southwest', 'RockyMountain', 'Farwest'
     ]
     # first set the $YEAR$ keys
     for y in range(1997, 2018):
