@@ -23,8 +23,6 @@ pymysql.install_as_MySQLdb()
 
 engine = create_engine('sqlite:///p3.db', echo=False)
 
-engine.execute("SELECT * FROM info_by_year_state").fetchall()
-
 db_df = pd.read_sql('info_by_year_state', con=engine)
 db_df_r = pd.read_sql('info_by_year_region', con = engine)
 
@@ -40,7 +38,6 @@ db_df_r_yr = db_df_r.set_index(['Year', 'Region'], inplace=False)
 DB_dict = {}
 DB_r_dict = {}
 
-import json
 db_df_ys_dict = db_df_ys.to_dict('index')
 db_df_r_yr_dict = db_df_r_yr.to_dict('index')
 
