@@ -35,7 +35,7 @@ db_df.rename(index=str, columns={"level_1": "State"},inplace=True)
 db_df_r.rename(index=str, columns={"level_1": "Region"},inplace=True)
 
 db_df_ys = db_df.set_index(['Year', 'State'], inplace=False)
-db_df_r_yr = db_df.set_index(['Year', 'Region'], inplace=False)
+db_df_r_yr = db_df_r.set_index(['Year', 'Region'], inplace=False)
 
 DB_dict = {}
 DB_r_dict = {}
