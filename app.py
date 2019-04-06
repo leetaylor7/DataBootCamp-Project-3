@@ -19,16 +19,29 @@ from sqlalchemy.orm import Session
 app = Flask(__name__)
 
 # flask route to update database
+# also sets up the landing page
+# this way we always have updated data when we land
 @app.route("/")
 def index():
-
-    return render_template("index.html")
-
-
-@app.route('/api/update')
 def updateAPI():
     API_get.updateDB()
     return render_template("index.html")
+
+# sets up the links to the various html pages
+@app.route("/barcharts")
+
+    return render_template("barcharts.html")
+
+@app.route("/map")
+
+    return render_template("map.html")
+
+@app.route("/plotly")
+
+    return render_template("plotly.html")
+
+
+
 
 # # hacky way to possibly get the JSON from API_get
 # # this route is more related to what Yang's doing but I figured I'd put this here
