@@ -76,6 +76,10 @@
         <h3 class="text-center" id="chartName">Plotly Comparison</h3>
         <div class="row">
           <div class="jumbotron">
+              <div class="well">
+                  <h5>SELECT Year:</h5>
+                  <select id="selYear" onchange="optionChanged(this.value)"></select>
+                </div>
             <div class="thumbnail">
             <div id="plotly"></div>
               <!-- <img src="https://i.ytimg.com/vi/tntOCGkgt98/maxresdefault.jpg" alt="..."> -->
@@ -88,5 +92,6 @@
           </div>
         </div>
     </div>
+    <script type="text/javascript" src="static/js/plotlylogic.js"></script>
     </body>
     </div>

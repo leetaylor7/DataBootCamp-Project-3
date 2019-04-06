@@ -1,102 +1,85 @@
-var apiKey = "pk.eyJ1IjoibHRheWxvcjA3IiwiYSI6ImNqdGxtZDlsczB0eGg0M3BnOHowM2Jma3EifQ.5a-c-tS-rq0xzNl-UMfOmA"
+// function buildCharts(sample) {
 
+  // // @TODO: Use `d3.json` to fetch the sample data for the plots
+  //  var url = `/api/get`
+  //  d3.json(url).then(function(response) {
+  //    console.log(Object.entries(response))
 
-// Store our API endpoint inside queryUrl
-var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
-console.log(queryUrl)
-// Perform a GET request to the query URL
-d3.json(queryUrl).then(function(data) {
-  console.log(data)
-  // Once we get a response, send the data.features object to the createFeatures function
-  createFeatures(data.features);
-});
+//   // @TODO: Build a Bubble Chart using the sample data   
+//   trace1 = {
+//    type: "scatter",
+//    x: response.otu_ids,
+//    y: response.sample_values,
+//    mode: "markers",
+//    marker: {
+//      size: response.sample_values,
+//      color: response.otu_ids,
+//    }
+//  };
 
-function createFeatures(earthquakeData) {
+//    var data = [trace1];
 
-  // Define a function we want to run once for each feature in the features array
-  // Give each feature a popup describing the place and time of the earthquake
-  function popupBinder(feature, layer) {
-    layer.bindPopup("<h3>" + feature.properties.place +
-      "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
-  }
+//    var layout = {
+//      title: "Bubble Chart"
+//    };
 
-  console.log(earthquakeData);
+//    Plotly.newPlot("plotly", data, layout);
 
-  //run an if statment to determine color
-  function colorcolor(feature){
-    var magnitude = feature.properties.mag; 
-    if (magnitude >= 4) {
-      color = "#DC143C";
-    }
-    else if (magnitude >= 2.5) {
-      color = "#FFD700";
-    }
-    else {
-      color = "#3388ff"
-    }
-    return color
-  }
-  // Create a GeoJSON layer containing the features array on the earthquakeData object
-  // Run the onEachFeature function once for each piece of data in the array
-  var earthquakes = L.geoJSON(earthquakeData, {
-    "pointToLayer": function (feature, latlng) {
-      var geojsonMarkerOptions = {
-        radius: feature.properties.mag * 10,
-        fillopacity: feature.properties.mag,
-        opacity: feature.properties.mag / 6,
-        color: colorcolor(feature)
-      }
-      return L.circleMarker(latlng, geojsonMarkerOptions)
-    },
-    "onEachFeature": popupBinder
-  });
+//   // @TODO: Build a Pie Chart
+//   // HINT: You will need to use slice() to grab the top 10 sample_values,
+//   // otu_ids, and labels (10 each).
+//   trace2 = {
+//     type: "pie",
+//     labels: response.otu_ids.slice(0,10),
+//     values: response.sample_values.slice(0,10),
+//     text: response.otu_labels.slice(0,10)    
+//   };
 
-  // Sending our earthquakes layer to the createMap function
-  createMap(earthquakes);
-}
+//   var data2 = [trace2];
 
-function createMap(earthquakes) {
+//   var layout2 ={
+//     title: "Pie Chart"
+//   }
 
-  // Define streetmap and darkmap layers
-  var streetmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-    maxZoom: 18,
-    id: "mapbox.streets",
-    accessToken: apiKey
-  });
-
-  var darkmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-    maxZoom: 18,
-    id: "mapbox.dark",
-    accessToken: apiKey
-  });
-
-  // Define a baseMaps object to hold our base layers
-  var baseMaps = {
-    "Street Map": streetmap,
-    "Dark Map": darkmap
-  };
-
-  // Create overlay object to hold our overlay layer
-  var overlayMaps = {
-    Earthquakes: earthquakes
-  };
-
-  // Create our map, giving it the streetmap and earthquakes layers to display on load
-  var myMap = L.map("chart", {
-    center: [
-      37.09, -95.71
-    ],
-    zoom: 5,
-    layers: [streetmap, earthquakes]
-  });
-
-  // Create a layer control
-  // Pass in our baseMaps and overlayMaps
-  // Add the layer control to the map
-  L.control.layers(baseMaps, overlayMaps, {
-    collapsed: false
-  }).addTo(myMap);
-}
+//   Plotly.newPlot("pie", data2, layout2)
+// });
 // }
+
+function init() {
+ // Grab a reference to the dropdown select element
+ var selector = d3.select("#selYear");
+
+ // Use the list of sample names to populate the select options
+ d3.json("/api/get").then((response) => {
+   var selection = Object.keys(response)
+      selection.forEach((Y) => {
+        selector
+          .append("option")
+          .text(Y)
+          .property("value", Y)
+
+     // console.log(response[selector])
+
+   // Use the first sample from the list to build the initial plots
+   const firstYear = selection[0];
+    console.log(response[firstYear])
+  //  buildCharts(firstYear);
+  //  buildMetadata(firstSample);
+});
+}); 
+}
+
+// function optionChanged(newYear) {
+//  // Fetch new data each time a new sample is selected
+//  buildCharts(newYear);
+//  buildMetadata(newYear);
+// }
+
+// // Initialize the dashboard
+init();
+
+// d3.json("/api/get").then((response) => {
+//   var years = Object.keys(response)
+//     years.forEach((year) =>
+//       console.log(response[year])
+// );
