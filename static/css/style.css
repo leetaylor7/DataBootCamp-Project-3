@@ -1,0 +1,39 @@
+/* remove default margin and padding from body */
+body {
+  padding: 0;
+  margin: 0;
+}
+
+/* set map, body, and html to 40% of the screen size */
+#chart,
+body,
+html {
+  height: 80%;
+  /* width: 500px; */
+}
+
+.jumbotron {
+  width: 80%;
+  height: 800px
+}
+
+.sidenav {
+  height: 100%; /* 100% Full-height */
+  width: 200; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 50; /* Stay at the top */
+  left: 0;
+  background-color: #e7e7e7; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 0px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+  }
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
