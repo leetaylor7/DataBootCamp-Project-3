@@ -11,8 +11,7 @@ from config import BEA_pop_url
 # REPLACE 'WILDCARD' with 51, 52, 53
 
 # JSON for per year change over year/state, empty at start, need to run updateDB to get values
-yearly_change_dict_states = {}
-yearly_change_dict_regions = {}
+yearly_change_dict = {}
 
 def updateDB():
     # BEA_GDP: 
@@ -36,11 +35,6 @@ def updateDB():
     # Going to store as {'$YEAR$' : '$STATE$' : {keys-values}}
 
     DB_dict = {}
-
-    # make a list of the regions to set them in another table
-    regions = [
-        'NewEngland', 'Mideast', 'GreatLakes', 'Plains', 'Southeast', 'Southwest', 'RockyMountain', 'Farwest'
-    ]
     # first set the $YEAR$ keys
     for y in range(1997, 2018):
         DB_dict[y] = {}
@@ -71,23 +65,20 @@ def updateDB():
     # now DB_dict[$YEAR$][$STATE$] has GDP, $categories$ keys and stored values as floats
 
     # DB_dict now has the desired structure
+    # create a DataFrame object using DB_dict
+    # multi-indexed 
+    DB_DF = pd.DataFrame.from_dict({(i,j): DB_dict[i][j] for i in DB_dict.keys() for j in DB_dict[i].keys()}, orient = 'index')
 
-    # Split DB_dict into state_dict and region_dict
-    state_dict = {}
-    region_dict = {}
-    for year in list(DB_dict.keys()):
-        state_dict[year] = {}
-        region_dict[year] = {}
-        for key in list(DB_dict[year].keys()):
-            if key in regions:
-                region_dict[year][key] = DB_dict[year][key]
-            else:
-                state_dict[year][key] = DB_dict[year][key]
+    # it looks like there are some non-state locations still, but I'll leave them since they might be useful
 
+    # next create/update the sqlite database
+    engine = create_engine('sqlite:///p3.db')
+    conn = engine.connect()
+
+    DB_DF.to_sql(name = 'info_by_year_state', con = conn, if_exists = 'replace')
 
     # update yearly_change_dict using DB_dict
     # updating the structure of y_c_d to be similar to DB_dict
-    yearly_change_dict = {}
     years = list(DB_dict.keys())
     for i in range(len(years)):
         yearly_change_dict[years[i]] = {}
@@ -103,48 +94,12 @@ def updateDB():
                 # if this is the first year, change should be = entry
             else:
                 yearly_change_dict[years[i]][state] = {
-                    'GDP Change': 0,
-                    'Personal Dist Income Change': 0,
-                    'Population Change': 0,
-                    'Personal Dist Income Per Capita Change': 0
+                    'GDP Change': DB_dict[years[i]][state]['GDP (millions of dollars)'],
+                    'Personal Dist Income Change': DB_dict[years[i]][state][categories[0]],
+                    'Population Change': DB_dict[years[i]][state][categories[1]],
+                    'Personal Dist Income Per Capita Change': DB_dict[years[i]][state][categories[2]]
                 }
-    
-    # split yearly_change_dict into _regions, _states
-    for year in years:
-        yearly_change_dict_regions[year] = {}
-        yearly_change_dict_states[year] = {}
-        for key in list(yearly_change_dict[year].keys()):
-            if key in regions:
-                yearly_change_dict_regions[year][key] = yearly_change_dict[year][key]
-            else:
-                yearly_change_dict_states[year][key] = yearly_change_dict[year][key]
-    
-    # put the changes into the dictionary for DB_DF, DB_regions_DF
-    # final_state_dict,final_region_dict
-    final_state_dict = {}
-    final_region_dict = {}
-    for year in years:
-        final_state_dict[year] = {}
-        final_region_dict[year] = {}
-        for key in list(state_dict[year].keys()):
-            final_state_dict[year][key] = state_dict[year][key]
-        for key in list(region_dict[year].keys()):
-            final_region_dict[year][key] = region_dict[year][key]
-        for key in list(yearly_change_dict_states[year].keys()):
-            final_state_dict[year][key].update(yearly_change_dict_states[year][key])
-        for key in list(yearly_change_dict_regions[year].keys()):
-            final_region_dict[year][key].update(yearly_change_dict_regions[year][key])
 
-    # create a DataFrame object using DB_dict
-    # multi-indexed
-    
-    DB_DF = pd.DataFrame.from_dict({(i,j): final_state_dict[i][j] for i in final_state_dict.keys() for j in final_state_dict[i].keys()}, orient = 'index')
-    DB_regions_DF = pd.DataFrame.from_dict({(i,j): final_region_dict[i][j] for i in final_region_dict.keys() for j in final_region_dict[i].keys()}, orient = 'index')
-
-    
-    # next create/update the sqlite database
-    engine = create_engine('sqlite:///p3.db')
-    conn = engine.connect()
-
-    DB_DF.to_sql(name = 'info_by_year_state', con = conn, if_exists = 'replace')
-    DB_regions_DF.to_sql(name = 'info_by_year_region', con = conn, if_exists = 'replace')
+    # delete this once Yang's code is done, no return statement is necessary in
+    # this function
+    return DB_dict
