@@ -138,8 +138,8 @@ def updateDB():
     # create a DataFrame object using DB_dict
     # multi-indexed
     
-    DB_DF = pd.DataFrame.from_dict({(i,j): state_dict[i][j] for i in state_dict.keys() for j in state_dict[i].keys()}, orient = 'index')
-    DB_regions_DF = pd.DataFrame.from_dict({(i,j): region_dict[i][j] for i in region_dict.keys() for j in region_dict[i].keys()}, orient = 'index')
+    DB_DF = pd.DataFrame.from_dict({(i,j): final_state_dict[i][j] for i in final_state_dict.keys() for j in final_state_dict[i].keys()}, orient = 'index')
+    DB_regions_DF = pd.DataFrame.from_dict({(i,j): final_region_dict[i][j] for i in final_region_dict.keys() for j in final_region_dict[i].keys()}, orient = 'index')
 
     
     # next create/update the sqlite database
