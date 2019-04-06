@@ -53,7 +53,7 @@ def plotly():
 @app.route('/api/get')
 def getAPI():
     # return jsonify(API_get.updateDB())
-    return jsonify(sql_to_json.DB_dict)
+    return jsonify([sql_to_json.DB_dict, sql_to_json.DB_r_dict])
 
 # be sure to run the update route before trying this or you'll get a blank JSON
 @app.route('/api/get_change')
