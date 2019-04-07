@@ -1,9 +1,9 @@
-// function buildCharts(sample) {
+function buildCharts(newYear) {
 
-  // // @TODO: Use `d3.json` to fetch the sample data for the plots
-  //  var url = `/api/get`
-  //  d3.json(url).then(function(response) {
-  //    console.log(Object.entries(response))
+//   // // @TODO: Use `d3.json` to fetch the sample data for the plots
+//   //  var url = `/api/get`
+//    d3.json(url).then(function(response) {
+//      console.log(Object.entries(response[selection]))
 
 //   // @TODO: Build a Bubble Chart using the sample data   
 //   trace1 = {
@@ -57,24 +57,40 @@ function init() {
           .append("option")
           .text(Y)
           .property("value", Y)
-
-     // console.log(response[selector])
-
-   // Use the first sample from the list to build the initial plots
-   const firstYear = selection[0];
-    console.log(response[firstYear])
-  //  buildCharts(firstYear);
+  //  buildCharts(response);
   //  buildMetadata(firstSample);
-});
+  });
+  // Use the first sample from the list to build the inSitial plots
+
+  var dataSelector = d3.select('#selData')
+  const year = Object.entries(response[1997]);
+    var key = Object.values(year[0])
+    var dataNames = Object.keys(key[1])
+      dataNames.forEach((DN) => {
+        dataSelector
+          .append("option")
+          .text(DN)
+          .property("value", DN)
+      });
+
+
+    // console.log(firstYear[0][1])
+    // firstYear.forEach((State) => {
+      // console.log(State)
+    // });
 }); 
 }
 
-// function optionChanged(newYear) {
-//  // Fetch new data each time a new sample is selected
-//  buildCharts(newYear);
-//  buildMetadata(newYear);
-// }
+function optionChanged(newYear) {
+ // Fetch new data each time a new item is selected
+  buildCharts(newYear);
+}
 
+function dataChanged(newData) {
+ // Fetch new data each time a new item is selected
+  buildCharts(newData);
+}
+  
 // // Initialize the dashboard
 init();
 
