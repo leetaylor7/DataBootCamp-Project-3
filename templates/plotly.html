@@ -78,9 +78,9 @@
           <div class="jumbotron">
               <div class="well">
                   <h5>SELECT Year:</h5>
-                  <select id="selYear" onchange="optionChanged(this.value)"></select>
+                  <!-- <select id="selYear" onchange="optionChanged(this.value)"></select> -->
                   <h5>SELECT Data Type:</h5>
-                  <select id="selData" onchange="dataChanged(this.value)"></select>
+                  <select id="selData" onchange="optionChanged(this.value)"></select>
               </div>
             <div class="thumbnail">
             <div id="plotly"></div>
@@ -94,6 +94,9 @@
           </div>
         </div>
     </div>
+    <script src="https://cdn.plot.ly/plotly-1.31.2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script type="text/javascript" src="static/js/plotlylogic.js"></script>
     </body>
     </div>
