@@ -1,26 +1,25 @@
 
-function buildCharts(Y) {
+function buildCharts(yearFilter, dataFilter) {
 
     var xData = [];
     var yData = [];
 //   // // @TODO: Use `d3.json` to fetch the sample data for the plots
    var url = `/api/get`
    d3.json(url).then(function(response) {
-     console.log(Y)
-     var yearInfo = response[1997]
+     var yearInfo = response[yearFilter]
      var dataKeys = Object.keys(yearInfo)
      var dataValues = Object.values(yearInfo)
-    //  console.log(dataNames)
+
+     // loops over the selected year to populate the data
      for (var j = 0; j < dataKeys.length; j++) {
-      //  console.log(dataKeys[j])
       yData
-       .push(dataValues[j][Y])
+       .push(dataValues[j][dataFilter])
       xData
        .push(dataKeys[j])
      }
 
-     console.log(xData)
-     console.log(yData)
+     console.log(yearFilter)
+     console.log(dataFilter)
 
   // @TODO: Build a Bubble Chart using the sample data   
   trace1 = {
@@ -58,9 +57,6 @@ function buildCharts(Y) {
 });
 }
 
- // Fetch new data each time a new item is selected
-
-
 function init() {
   // Grab a reference to the dropdown select element
   var selector = d3.select("#selYear");
@@ -73,11 +69,9 @@ function init() {
            .append("option")
            .text(Y)
            .property("value", Y)
-   //  buildCharts(response);
-   //  buildMetadata(firstSample);
    });
-   // Use the first sample from the list to build the inSitial plots
- 
+
+   // populates the list for the different data
    var dataSelector = d3.select('#selData')
    const year = Object.entries(response[1997]);
      var key = Object.values(year[0])
@@ -88,25 +82,38 @@ function init() {
            .text(DN)
            .property("value", DN)
        });
- 
- 
-     // console.log(firstYear[0][1])
-     // firstYear.forEach((State) => {
-       // console.log(State)
-     // });
  }); 
+
+ // Builds the first chart
+ buildCharts(yearFilter, dataFilter);
+}
+
+ var yearFilter = [1997];
+ var dataFilter = ["GDP (millions of dollars)"];
+
+ // Sets up a function to change the year filter for the chart
+ function optionChanged(newYear) {
+  yearFilter.push(newYear)
+  var filterLength = yearFilter.length
+  if (filterLength >= 2) {
+    yearFilter.shift();
+  }
+  else {
+  }
+   buildCharts(yearFilter, dataFilter);
  }
- 
- function optionChanged(newData) {
-  var changedData = newData
-  //  console.log(changedData)
-   buildCharts(changedData);
+
+ // Sets up a function to change the data filter for the chart
+ function dataChanged(newData) {
+  dataFilter.push(newData)
+  var filterLength = dataFilter.length
+  if (filterLength >= 2) {
+    dataFilter.shift();
+  }
+  else {
+  }
+  buildCharts(yearFilter, dataFilter);
  }
+
 
 init();
-
-// d3.json("/api/get").then((response) => {
-//   var years = Object.keys(response)
-//     years.forEach((year) =>
-//       console.log(response[year])
-// );
