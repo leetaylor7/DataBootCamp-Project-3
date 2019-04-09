@@ -83,3 +83,4 @@ BEA API Documentation: https://apps.bea.gov/API/signup/index.cfm
 
 Footnotes:
 - All dollar estimates are not adjusted for inflation
+	- This was due to state level inflation data only available from 2008 to 2016
