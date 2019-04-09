@@ -4,12 +4,12 @@ body {
   margin: 0;
 }
 
-/* set map, body, and html to 40% of the screen size */
+/* set map, body, and html to 80% of the screen size */
 #chart,
 body,
 html {
-  height: 80%;
-  /* width: 500px; */
+  height: 900px;
+  width: 80%;
 }
 
 .jumbotron {
