@@ -77,10 +77,12 @@
         <div class="row">
           <div class="jumbotron">
               <div class="well">
-                  <h5>SELECT Year:</h5>
+                  <h5>SELECT Variable Year:</h5>
                   <select id="selYear" onchange="optionChanged(this.value)" placeholder="1997"></select>
                   <h5>SELECT Data Type:</h5>
                   <select id="selData" onchange="dataChanged(this.value)" placeholder="GDP (millions of dollars)"></select>
+                  <h5>SELECT Base Year:</h5>
+                  <select id="selBase" onchange="baseChanged(this.value)" placeholder="1997"></select>
               </div>
             <div class="thumbnail">
             <div id="plotly"></div>
