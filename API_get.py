@@ -13,8 +13,8 @@ from config import BEA_pop_url
 # JSON for per year change over year/state, empty at start, need to run updateDB to get values
 yearly_change_dict_states = {}
 yearly_change_dict_regions = {}
-DB_dict = {}
-DB_r_dict = {}
+f_DB_dict = {}
+f_DB_r_dict = {}
 
 def updateDB():
     # BEA_GDP: 
@@ -166,24 +166,24 @@ def updateDB():
     db_r_df.rename(index=str, columns={"level_1": "Region"},inplace=True)
 
     db_df_ys = db_df.set_index(['Year', 'State'], inplace=False)
-    db_df_yr = db_r_df.set_index(['Year', 'Region'], inplace=False)
+    db_df_yr = db_df.set_index(['Year', 'Region'], inplace=False)
 
     db_df_ys_dict = db_df_ys.to_dict('index')
     db_df_yr_dict = db_df_yr.to_dict('index')
 
     for (key1,key2) in db_df_ys_dict.keys():
-        DB_dict[key1] = {}
+        f_DB_dict[key1] = {}
     for (key1,key2) in db_df_yr_dict.keys():
-        DB_r_dict[key1] = {}
+        f_DB_r_dict[key1] = {}
     
     for (key1,key2) in db_df_ys_dict.keys():
-        DB_dict[key1][key2] = {}
+        f_DB_dict[key1][key2] = {}
     for (key1,key2) in db_df_yr_dict.keys():
-        DB_r_dict[key1][key2] = {}
+        f_DB_r_dict[key1][key2] = {}
     
     for (key1,key2) in db_df_ys_dict.keys():
-        DB_dict[key1][key2] = db_df_ys_dict[(key1,key2)]
+        f_DB_dict[key1][key2] = db_df_ys_dict[(key1,key2)]
     for (key1,key2) in db_df_yr_dict.keys():
-        DB_r_dict[key1][key2] = db_df_yr_dict[(key1,key2)]
+        f_DB_r_dict[key1][key2] = db_df_yr_dict[(key1,key2)]
     conn.close()
 
