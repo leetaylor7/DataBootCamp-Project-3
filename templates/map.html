@@ -52,43 +52,22 @@
     <!-- Sidebar -->
     <nav id="sidebar" class="sidenav">
         <div class="sidebar-header">
-            <h1>Show and Tell Charts</h1>
+            <h1>Leaflet Map</h1>
         </div>
         <ul class="list-unstyled components">
-            <p>Test</p>
             <li class="active">
-                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Test toggle</a>
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Location Type</a>
                 <ul class="collapse list-unstyled" id="homeSubmenu">
                     <li>
-                        <a id="assetAllocation">lever 1</a>
+                        <a id="stateData" onclick="regionChanged('/api/get_state')" class="btn btn-primary" role="button">State Data</a>
                     </li>
                     <li>
-                        <a href="#">lever 2</a>
-                    </li>
-                    <li>
-                        <a href="#">lever 3</a>
+                        <a id="regionalData" onclick="regionChanged('/api/get_region')" class="btn btn-primary" role="button">Regional Data</a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="#">About</a>
-            </li>
-            <li>
-                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
-                <ul class="collapse list-unstyled" id="pageSubmenu">
-                    <li>
-                        <a href="#">Page 1</a>
-                    </li>
-                    <li>
-                        <a href="#">Page 2</a>
-                    </li>
-                    <li>
-                        <a href="#">Page 3</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="#">Contact</a>
+                <a href="https://www.bea.gov/">Source</a>
             </li>
         </ul>
     </nav>
@@ -97,6 +76,15 @@
         <h3 class="text-center" id="chartName">Chart Name</h3>
         <div class="row">
           <div class="jumbotron">
+              <div class="jumbotron">
+                  <div class="well well-sm">
+                      <h5>SELECT Variable Year:</h5>
+                      <select id="selYear" onchange="optionChanged(this.value)" placeholder="1997"></select>
+                      <h5>SELECT Data Type:</h5>
+                      <select id="selData" onchange="dataChanged(this.value)" placeholder="GDP (millions of dollars)"></select>
+                      <h5>SELECT Base Year:</h5>
+                      <select id="selBase" onchange="baseChanged(this.value)" placeholder="1997"></select>
+                  </div>
             <div class="thumbnail">
             <div id="chart"></div>
               <!-- <img src="https://i.ytimg.com/vi/tntOCGkgt98/maxresdefault.jpg" alt="..."> -->
@@ -110,6 +98,6 @@
         </div>
     </div>
     <script type="text/javascript" src="static/js/config.js"></script>
-    <script type="text/javascript" src="static/js/logic.js"></script>
+    <script type="text/javascript" src="static/js/mapChart.js"></script>
     </body>
     </div>
