@@ -1,4 +1,8 @@
-// This function is what makes the chart
+// =========================================================================================================================
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// This function is what makes the main chart
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// =========================================================================================================================
 function buildCharts(yearFilter, dataFilter, baseFilter, regionFilter) {
 
     var xData = [];
@@ -44,15 +48,24 @@ function buildCharts(yearFilter, dataFilter, baseFilter, regionFilter) {
     y: baseYData,
     name: `${baseFilter}`,
   };
-
-   var data = [trace1, trace2];
+     // checks to see if the comparison is for the same variable
+     if (yearFilter[0] == baseFilter[0]) {
+      var data = [trace1];
+    }
+    else {
+       var data = [trace1, trace2];
+    }
 
    var layout = {
      title: `${dataFilter} Breakdown By State`,
      xaxis: {
        tickmode: 'linear',
        type: 'category',
-     }
+     },
+    legend: {
+      x: 0,
+      y: 1,
+    }
    };
 
    Plotly.newPlot("plotly", data, layout);
@@ -62,7 +75,11 @@ function buildCharts(yearFilter, dataFilter, baseFilter, regionFilter) {
 });
 }
 
-  // This builds the second chart with relative data
+// =========================================================================================================================
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// THIS Builds the Second Chart
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// =========================================================================================================================
 function secondChart(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter) {
 
     var xData = [];
@@ -101,7 +118,7 @@ function secondChart(yearFilter, dataFilter, baseFilter, regionFilter, compareFi
       }
 
       
-
+  // makes the data comparison Chart
   var relativeChange = [];
   var compChange = [];
    for (var j = 0; j < dataKeys.length; j++) {
@@ -125,17 +142,48 @@ function secondChart(yearFilter, dataFilter, baseFilter, regionFilter, compareFi
     name: `${compareFilter}`
    }
 
-   // checks to see if the comparison is for the same variable
+   // =========================================================================================================================
+   // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   // THIS Builds the Spread Chart! This is part of the second Chart Interface!!
+   // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   // =========================================================================================================================
    if (dataFilter[0] == compareFilter[0]) {
      var data2 = [trace3];
-     console.log(dataFilter[0])
-     console.log(compareFilter[0])
    }
    else {
       var data2 = [trace3, trace4];
-      console.log(dataFilter[0])
-      console.log(compareFilter[0])
+      
+      // Makes the Spread Chart
+      var spread = [];
+      for (var j = 0; j < relativeChange.length; j++) {
+        spread 
+          .push((relativeChange[j] - compChange[j]))
+        
+      }
+
+      trace5 = {
+        type: "bar",
+        x: xData,
+        y: spread,
+        name: "Relative Spread"
+      }
+
+      var layout3 = {
+        title: `${dataFilter} - ${compareFilter} Spread by State`,
+        xaxis: {
+          tickmode: 'linear',
+          type: 'category',
+        },
+        yaxis: {
+          tickformat: ',.0%'
+        }
+      }
+      var data3 = [trace5];
+
+      Plotly.newPlot("plotlySpread", data3, layout3)
    }
+
+  
   var layout2 = {
     title: `${dataFilter} and ${compareFilter} Change by State`,
     xaxis: {
@@ -144,6 +192,10 @@ function secondChart(yearFilter, dataFilter, baseFilter, regionFilter, compareFi
     },
     yaxis: {
       tickformat: ',.0%'
+    },
+    legend: {
+      x: 0,
+      y: 1,
     }
   }
 
@@ -152,7 +204,11 @@ function secondChart(yearFilter, dataFilter, baseFilter, regionFilter, compareFi
 });
 }
 
-
+// =========================================================================================================================
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// THIS MAKES THE PIE CHART
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// =========================================================================================================================
 function thirdChart(yearFilter, dataFilter, baseFilter, regionFilter) {
 
   var xData = [];
@@ -193,7 +249,7 @@ function thirdChart(yearFilter, dataFilter, baseFilter, regionFilter) {
 var data2 = [trace3];
 
 var layout2 = {
-  title: `${dataFilter} Pie Chart`,
+  title: `${dataFilter} as of ${yearFilter[0]} Pie Chart`,
 }
 
 Plotly.newPlot("plotlypie", data2, layout2);
@@ -201,6 +257,12 @@ Plotly.newPlot("plotlypie", data2, layout2);
 });
 }
 
+
+// =========================================================================================================================
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// THIS Initializes the Dashboard
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// =========================================================================================================================
 function init() {
   // Grab a reference to the dropdown select element
   var selector = d3.select("#selYear");
