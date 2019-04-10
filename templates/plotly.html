@@ -76,14 +76,29 @@
         <h3 class="text-center" id="chartName">Plotly Comparison</h3>
         <div class="row">
           <div class="jumbotron">
-              <div class="well well-sm">
+            <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                <div class="well well-sm">
                   <h5>SELECT Variable Year:</h5>
                   <select id="selYear" onchange="optionChanged(this.value)" placeholder="1997"></select>
-                  <h5>SELECT Data Type:</h5>
-                  <select id="selData" onchange="dataChanged(this.value)" placeholder="GDP (millions of dollars)"></select>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="well well-sm">
                   <h5>SELECT Base Year:</h5>
                   <select id="selBase" onchange="baseChanged(this.value)" placeholder="1997"></select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="well well-sm">
+                      <h5>SELECT Data Type:</h5>
+                      <select id="selData" onchange="dataChanged(this.value)" placeholder="GDP (millions of dollars)"></select>
+                    </div>
+                  </div>
               </div>
+            </div>
+            <div class="row">
             <div class="thumbnail">
             <div id="plotly"></div>
               <div class="caption">
@@ -93,13 +108,25 @@
               </div>
             </div>
           </div>
+          </div>
         </div>
+      </div>
     </div>
     <div class="container">
         <div class="row">
           <div class="jumbotron">
+            <div class="row">
+              <div class="col-md-6">
+                  <div class="well well-sm">
+                    <h5>SELECT Data For Comparison:</h5>
+                    <select id="selComp" onchange="compChanged(this.value)" placeholder="GDP (millions of dollars)"></select>
+                  </div>
+                </div>
+              </div>
             <div class="thumbnail">
-            <div id="plotlychange"></div>
+              <div class="row">
+                <div id="plotlychange"></div>
+              </div>
               <div class="caption">
                 <h3>Sources:</h3>
                 <p id="citations">Bureau of Economic Analysis</p>

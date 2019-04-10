@@ -63,11 +63,13 @@ function buildCharts(yearFilter, dataFilter, baseFilter, regionFilter) {
 }
 
   // This builds the second chart with relative data
-function secondChart(yearFilter, dataFilter, baseFilter, regionFilter) {
+function secondChart(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter) {
 
     var xData = [];
     var yData = [];
+    var comp = [];
     var baseYData = [];
+    var baseComp = [];
 //   // // @TODO: Use `d3.json` to fetch the sample data for the plots
    var url = regionFilter[0]
    d3.json(url).then(function(response) {
@@ -79,6 +81,8 @@ function secondChart(yearFilter, dataFilter, baseFilter, regionFilter) {
      for (var j = 0; j < dataKeys.length; j++) {
       yData
        .push(dataValues[j][dataFilter])
+      comp
+       .push(dataValues[j][compareFilter])
       xData
        .push(dataKeys[j])
      }
@@ -92,25 +96,48 @@ function secondChart(yearFilter, dataFilter, baseFilter, regionFilter) {
       for (var j = 0; j < dataKeys.length; j++) {
        baseYData
         .push(dataValues[j][dataFilter])
+       baseComp
+        .push(dataValues[j][compareFilter])
       }
 
+      
+
   var relativeChange = [];
+  var compChange = [];
    for (var j = 0; j < dataKeys.length; j++) {
     relativeChange
      .push(((yData[j] / baseYData[j])-1))
+    compChange
+     .push(((comp[j] / baseComp[j]) - 1))
    }
 
    trace3 = {
      type: "bar",
      x: xData,
      y: relativeChange,
-     name: "Relative Change"
+     name: `${dataFilter}`
     };
 
-  var data2 = [trace3];
+   trace4 = {
+    type: "bar",
+    x: xData,
+    y: compChange,
+    name: `${compareFilter}`
+   }
 
+   // checks to see if the comparison is for the same variable
+   if (dataFilter[0] == compareFilter[0]) {
+     var data2 = [trace3];
+     console.log(dataFilter[0])
+     console.log(compareFilter[0])
+   }
+   else {
+      var data2 = [trace3, trace4];
+      console.log(dataFilter[0])
+      console.log(compareFilter[0])
+   }
   var layout2 = {
-    title: `${dataFilter} Relative Change by State`,
+    title: `${dataFilter} and ${compareFilter} Change by State`,
     xaxis: {
       tickmode: 'linear',
       type: 'category',
@@ -195,6 +222,7 @@ function init() {
 
    // populates the list for the different data
    var dataSelector = d3.select('#selData')
+   var comSelector = d3.select('#selComp')
    const year = Object.entries(response[1997]);
      var key = Object.values(year[0])
      var dataNames = Object.keys(key[1])
@@ -203,11 +231,15 @@ function init() {
            .append("option")
            .text(DN)
            .property("value", DN)
+          comSelector
+          .append("option")
+          .text(DN)
+          .property("value", DN)
        });
   });
  // Builds the first chart
  buildCharts(yearFilter, dataFilter, baseFilter, regionFilter);
- secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+ secondChart(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter);
  thirdChart(yearFilter, dataFilter, baseFilter, regionFilter);
 };
 
@@ -219,6 +251,7 @@ function init() {
  var dataFilter = ["GDP (millions of dollars)"];
  var baseFilter = [1997];
  var regionFilter = ['/api/get_state'];
+ var compareFilter = ["GDP (millions of dollars)"];
 // =====================================================
 
 
@@ -230,7 +263,7 @@ function init() {
     yearFilter.shift();
   }
    buildCharts(yearFilter, dataFilter, baseFilter, regionFilter);
-   secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+   secondChart(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter);
    thirdChart(yearFilter, dataFilter, baseFilter, regionFilter);
  }
 
@@ -242,7 +275,7 @@ function init() {
     dataFilter.shift();
   }
   buildCharts(yearFilter, dataFilter, baseFilter, regionFilter);
-  secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+  secondChart(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter);
   thirdChart(yearFilter, dataFilter, baseFilter, regionFilter);
 }
 
@@ -254,7 +287,7 @@ function init() {
       baseFilter.shift();
     }
     buildCharts(yearFilter, dataFilter, baseFilter, regionFilter);
-    secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+    secondChart(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter);  
     thirdChart(yearFilter, dataFilter, baseFilter, regionFilter);
   }
 
@@ -266,8 +299,17 @@ function init() {
       regionFilter.shift();
     }
     buildCharts(yearFilter, dataFilter, baseFilter, regionFilter);
-    secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+    secondChart(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter);
     thirdChart(yearFilter, dataFilter, baseFilter, regionFilter);
    }
+
+   function compChanged(newCompare) {
+    compareFilter.push(newCompare)
+    var filterLength = compareFilter.length
+    if (filterLength >= 2) {
+      compareFilter.shift();
+    }
+    secondChart(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter);
+  }
 
 init();
