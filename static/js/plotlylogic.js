@@ -1,11 +1,11 @@
-
-function buildCharts(yearFilter, dataFilter, baseFilter) {
+// This function is what makes the chart
+function buildCharts(yearFilter, dataFilter, baseFilter, regionFilter) {
 
     var xData = [];
     var yData = [];
     var baseYData = [];
 //   // // @TODO: Use `d3.json` to fetch the sample data for the plots
-   var url = `/api/get`
+   var url = regionFilter[0]
    d3.json(url).then(function(response) {
      var yearInfo = response[yearFilter]
      var dataKeys = Object.keys(yearInfo)
@@ -29,10 +29,6 @@ function buildCharts(yearFilter, dataFilter, baseFilter) {
        baseYData
         .push(dataValues[j][dataFilter])
       }
-
-     console.log(yearFilter)
-     console.log(dataFilter)
-     console.log(baseFilter)
 
   // @TODO: Build a Bubble Chart using the sample data 
   trace1 = {
@@ -65,9 +61,9 @@ function init() {
   // Grab a reference to the dropdown select element
   var selector = d3.select("#selYear");
   var baseSelector = d3.select("#selBase")
- 
+  console.log(regionFilter)
   // Use the list of sample names to populate the select options
-  d3.json("/api/get").then((response) => {
+  d3.json(regionFilter).then((response) => {
     var selection = Object.keys(response)
        selection.forEach((Y) => {
          selector
@@ -93,12 +89,19 @@ function init() {
        });
   });
  // Builds the first chart
- buildCharts(yearFilter, dataFilter, baseFilter);
+ buildCharts(yearFilter, dataFilter, baseFilter, regionFilter);
 }
 
+
+// =====================================================
+// THIS IS WHERE THE FILTER VARIABLES LIVE!!!!!!
+// =====================================================
  var yearFilter = [1997];
  var dataFilter = ["GDP (millions of dollars)"];
  var baseFilter = [1997];
+ var regionFilter = ['/api/get_state'];
+// =====================================================
+
 
  // Sets up a function to change the year filter for the chart
  function optionChanged(newYear) {
@@ -109,7 +112,7 @@ function init() {
   }
   else {
   }
-   buildCharts(yearFilter, dataFilter, baseFilter);
+   buildCharts(yearFilter, dataFilter, baseFilter, regionFilter);
  }
 
  // Sets up a function to change the data filter for the chart
@@ -121,7 +124,7 @@ function init() {
   }
   else {
   }
-  buildCharts(yearFilter, dataFilter, baseFilter);
+  buildCharts(yearFilter, dataFilter, baseFilter, regionFilter);
 }
 
   // Sets up a function to change the base year for comparison 
@@ -133,8 +136,19 @@ function init() {
     }
     else {
     }
-    buildCharts(yearFilter, dataFilter, baseFilter);
+    buildCharts(yearFilter, dataFilter, baseFilter, regionFilter);
  }
 
+   // Sets up a function to change the base year for comparison 
+   function regionChanged(newRegion) {
+    regionFilter.push(newRegion)
+    var filterLength = regionFilter.length
+    if (filterLength >= 2) {
+      regionFilter.shift();
+    }
+    else {
+    }
+    buildCharts(yearFilter, dataFilter, baseFilter, regionFilter);
+   }
 
 init();
