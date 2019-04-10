@@ -8,7 +8,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
-    <link rel="stylesheet" href="../static/css/style.css" />
+    <link rel="stylesheet" href="static/css/style.css" />
     <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
 
   </head>
@@ -71,20 +71,32 @@
             </li>
         </ul>
     </nav>
-
+    <br>
+    <br>
     <div class="container">
-        <h3 class="text-center" id="chartName">Chart Name</h3>
+      <br>
         <div class="row">
           <div class="jumbotron">
-              <div class="jumbotron">
-                  <div class="well well-sm">
+              <div class="row">
+                  <div class="col-md-3">
+                    <div class="well well-sm">
                       <h5>SELECT Variable Year:</h5>
                       <select id="selYear" onchange="optionChanged(this.value)" placeholder="1997"></select>
-                      <h5>SELECT Data Type:</h5>
-                      <select id="selData" onchange="dataChanged(this.value)" placeholder="GDP (millions of dollars)"></select>
-                      <h5>SELECT Base Year:</h5>
-                      <select id="selBase" onchange="baseChanged(this.value)" placeholder="1997"></select>
-                  </div>
+                      </div>
+                    </div>
+                      <div class="col-md-3">
+                        <div class="well well-sm">
+                        <h5>SELECT Data Type:</h5>
+                        <select id="selData" onchange="dataChanged(this.value)" placeholder="GDP (millions of dollars)"></select>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="well well-sm">
+                          <h5>SELECT Base Year:</h5>
+                          <select id="selBase" onchange="baseChanged(this.value)" placeholder="1997"></select>
+                        </div>
+                      </div>
+                </div>
             <div class="thumbnail">
             <div id="chart"></div>
               <!-- <img src="https://i.ytimg.com/vi/tntOCGkgt98/maxresdefault.jpg" alt="..."> -->
