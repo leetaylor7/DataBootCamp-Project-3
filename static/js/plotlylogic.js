@@ -30,7 +30,7 @@ function buildCharts(yearFilter, dataFilter, baseFilter, regionFilter) {
         .push(dataValues[j][dataFilter])
       }
 
-  // @TODO: Build a Bubble Chart using the sample data 
+  // @TODO: Build the first Chart using the data 
   trace1 = {
    type: "bar",
    x: xData,
@@ -57,6 +57,119 @@ function buildCharts(yearFilter, dataFilter, baseFilter, regionFilter) {
 
    Plotly.newPlot("plotly", data, layout);
 
+
+});
+});
+}
+
+  // This builds the second chart with relative data
+function secondChart(yearFilter, dataFilter, baseFilter, regionFilter) {
+
+    var xData = [];
+    var yData = [];
+    var baseYData = [];
+//   // // @TODO: Use `d3.json` to fetch the sample data for the plots
+   var url = regionFilter[0]
+   d3.json(url).then(function(response) {
+     var yearInfo = response[yearFilter]
+     var dataKeys = Object.keys(yearInfo)
+     var dataValues = Object.values(yearInfo)
+
+     // loops over the selected year to populate the data
+     for (var j = 0; j < dataKeys.length; j++) {
+      yData
+       .push(dataValues[j][dataFilter])
+      xData
+       .push(dataKeys[j])
+     }
+
+     d3.json(url).then(function(response) {
+      var yearInfo = response[baseFilter]
+      var dataKeys = Object.keys(yearInfo)
+      var dataValues = Object.values(yearInfo)
+ 
+      // loops over the selected year to populate the data
+      for (var j = 0; j < dataKeys.length; j++) {
+       baseYData
+        .push(dataValues[j][dataFilter])
+      }
+
+  var relativeChange = [];
+   for (var j = 0; j < dataKeys.length; j++) {
+    relativeChange
+     .push(((yData[j] / baseYData[j])-1))
+   }
+
+   trace3 = {
+     type: "bar",
+     x: xData,
+     y: relativeChange,
+     name: "Relative Change"
+    };
+
+  var data2 = [trace3];
+
+  var layout2 = {
+    title: `${dataFilter} Relative Change by State`,
+    xaxis: {
+      tickmode: 'linear',
+      type: 'category',
+    },
+    yaxis: {
+      tickformat: ',.0%'
+    }
+  }
+
+  Plotly.newPlot("plotlychange", data2, layout2);
+});
+});
+}
+
+
+function thirdChart(yearFilter, dataFilter, baseFilter, regionFilter) {
+
+  var xData = [];
+  var yData = [];
+  var baseYData = [];
+//   // // @TODO: Use `d3.json` to fetch the sample data for the plots
+ var url = regionFilter[0]
+ d3.json(url).then(function(response) {
+   var yearInfo = response[yearFilter]
+   var dataKeys = Object.keys(yearInfo)
+   var dataValues = Object.values(yearInfo)
+
+   // loops over the selected year to populate the data
+   for (var j = 0; j < dataKeys.length; j++) {
+    yData
+     .push(dataValues[j][dataFilter])
+    xData
+     .push(dataKeys[j])
+   }
+
+   d3.json(url).then(function(response) {
+    var yearInfo = response[baseFilter]
+    var dataKeys = Object.keys(yearInfo)
+    var dataValues = Object.values(yearInfo)
+
+    // loops over the selected year to populate the data
+    for (var j = 0; j < dataKeys.length; j++) {
+     baseYData
+      .push(dataValues[j][dataFilter])
+    }
+
+ trace3 = {
+   type: "pie",
+   labels: xData,
+   values: yData,
+  };
+
+var data2 = [trace3];
+
+var layout2 = {
+  title: `${dataFilter} Pie Chart`,
+}
+
+Plotly.newPlot("plotlypie", data2, layout2);
 });
 });
 }
@@ -94,7 +207,9 @@ function init() {
   });
  // Builds the first chart
  buildCharts(yearFilter, dataFilter, baseFilter, regionFilter);
-}
+ secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+ thirdChart(yearFilter, dataFilter, baseFilter, regionFilter);
+};
 
 
 // =====================================================
@@ -114,9 +229,9 @@ function init() {
   if (filterLength >= 2) {
     yearFilter.shift();
   }
-  else {
-  }
    buildCharts(yearFilter, dataFilter, baseFilter, regionFilter);
+   secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+   thirdChart(yearFilter, dataFilter, baseFilter, regionFilter);
  }
 
  // Sets up a function to change the data filter for the chart
@@ -126,9 +241,9 @@ function init() {
   if (filterLength >= 2) {
     dataFilter.shift();
   }
-  else {
-  }
   buildCharts(yearFilter, dataFilter, baseFilter, regionFilter);
+  secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+  thirdChart(yearFilter, dataFilter, baseFilter, regionFilter);
 }
 
   // Sets up a function to change the base year for comparison 
@@ -138,10 +253,10 @@ function init() {
     if (filterLength >= 2) {
       baseFilter.shift();
     }
-    else {
-    }
     buildCharts(yearFilter, dataFilter, baseFilter, regionFilter);
- }
+    secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+    thirdChart(yearFilter, dataFilter, baseFilter, regionFilter);
+  }
 
    // Sets up a function to change the base year for comparison 
    function regionChanged(newRegion) {
@@ -150,9 +265,9 @@ function init() {
     if (filterLength >= 2) {
       regionFilter.shift();
     }
-    else {
-    }
     buildCharts(yearFilter, dataFilter, baseFilter, regionFilter);
+    secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+    thirdChart(yearFilter, dataFilter, baseFilter, regionFilter);
    }
 
 init();
