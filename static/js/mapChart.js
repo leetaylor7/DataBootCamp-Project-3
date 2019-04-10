@@ -23,16 +23,14 @@ let getPopup = function(feature, layer) {
 }
 
 // get geoJSON file (stateboarder.json)
-d3.json('stateboarder.json', function(data) {
-    L.geoJSON(data, {
-        style: function(feature) {
-            return {
-              color: "#ffffff",
-              weight: 3.5
-            };
-        },
-        onEachFeature: function(feature, layer) {
-            getPopup(feature, layer);
-        }
-    }).addTo(map);
-});
+L.geoJSON(stateBorders, {
+    style: function(feature) {
+        return {
+            color: "#ffffff",
+            weight: 3.5
+        };
+    },
+    onEachFeature: function(feature, layer) {
+        getPopup(feature, layer);
+    }
+}).addTo(map);
