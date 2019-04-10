@@ -166,7 +166,7 @@ def updateDB():
     db_r_df.rename(index=str, columns={"level_1": "Region"},inplace=True)
 
     db_df_ys = db_df.set_index(['Year', 'State'], inplace=False)
-    db_df_yr = db_df.set_index(['Year', 'Region'], inplace=False)
+    db_df_yr = db_r_df.set_index(['Year', 'Region'], inplace=False)
 
     db_df_ys_dict = db_df_ys.to_dict('index')
     db_df_yr_dict = db_df_yr.to_dict('index')
