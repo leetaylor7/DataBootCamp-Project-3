@@ -59,10 +59,10 @@
                 <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Location Type</a>
                 <ul class="collapse list-unstyled" id="homeSubmenu">
                     <li>
-                        <a id="stateData">State Data</a>
+                        <a id="stateData" onclick="regionChanged('/api/get_state')" class="btn btn-primary" role="button">State Data</a>
                     </li>
                     <li>
-                        <a id="regionalData">Regional Data</a>
+                        <a id="regionalData" onclick="regionChanged('/api/get_region')" class="btn btn-primary" role="button">Regional Data</a>
                     </li>
                 </ul>
             </li>
