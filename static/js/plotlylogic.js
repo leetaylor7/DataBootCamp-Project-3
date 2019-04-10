@@ -49,6 +49,10 @@ function buildCharts(yearFilter, dataFilter, baseFilter, regionFilter) {
 
    var layout = {
      title: `${dataFilter} Breakdown By State`,
+     xaxis: {
+       tickmode: 'linear',
+       type: 'category',
+     }
    };
 
    Plotly.newPlot("plotly", data, layout);
