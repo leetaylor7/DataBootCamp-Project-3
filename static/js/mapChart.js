@@ -74,7 +74,7 @@ function getColor(feature) {
 }
 var total = 0;
 for (let i = 0; i < relativeChange.length; i++) {
-  total += relativeChange[i]
+  total += relativeChange[i];
 }
 var avg = total / relativeChange.length;
 
@@ -85,14 +85,12 @@ let geoLay;
     //  console.log('running updateC');
       for (let i = 0; i < relativeChange.length; i++) {
         let colorI;
-        if (relativeChange[i] < Math.max(relativeChange)) {
-          colorI = '#400000';
+        if (relativeChange[i] > avg) {
+          colorI = '#00ff00';
         }else if (relativeChange[i] < avg) {
           colorI = '#ff0000';
-        }else if (relativeChange[i] < Math.min(relativeChange)) {
-          colorI = '#00ff00';
         }else{
-          colorI = '#006400';
+          colorI = '#000000';
         }
         colorsObj[xData[i]] = colorI;
       }
@@ -113,6 +111,32 @@ let geoLay;
         }
     });
     geoLay.addTo(map);
+    // create legend
+    // first make a few arrays to make it easier
+    let limits = [Math.min(relativeChange), avg, Math.max(relativeChange)];
+    let colors = ['#ff0000', '#000000', '#00ff00'];
+
+    let legend = L.control({position: 'bottomright'});
+    legend.onAdd = function() {
+        //create div
+        let div = L.DomUtil.create("div", "info legend");
+        let labels = [];
+
+        // create min/max
+        let legendInfo = "<h2>Color by Change #</h2>" +
+        "<div class=\"labels\">" +
+          "<div class=\"min\">" + limits[0] + "</div>" +
+          "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
+        "</div>";
+        div.innerHTML = legendInfo;
+
+        limits.forEach(function(limit, index) {
+            labels.push("<li style=\"background-color: " + colors[index] + "\"></li>");
+        });
+        div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+        return div;
+    };
+    legend.addTo(map);
 });
 });
 }
@@ -210,19 +234,17 @@ let geoLay;
 // function to 
 // get geoJSON file (stateboarder.json = stateBorders) and lay out Leaflet map
     //  console.log('running updateC');
-      for (let i = 0; i < relativeChange.length; i++) {
-        let colorI;
-        if (relativeChange[i] < Math.max(relativeChange)) {
-          colorI = '#400000';
-        }else if (relativeChange[i] < avg) {
-          colorI = '#ff0000';
-        }else if (relativeChange[i] < Math.min(relativeChange)) {
-          colorI = '#00ff00';
-        }else{
-          colorI = '#006400';
-        }
-        colorsObj[xData[i]] = colorI;
+    for (let i = 0; i < relativeChange.length; i++) {
+      let colorI;
+      if (relativeChange[i] > avg) {
+        colorI = '#00ff00';
+      }else if (relativeChange[i] < avg) {
+        colorI = '#ff0000';
+      }else{
+        colorI = '#000000';
       }
+      colorsObj[xData[i]] = colorI;
+    }
     let map = L.map("chart", {
       center: [39.8283, -98.5795],
       zoom: 4
@@ -246,6 +268,29 @@ let geoLay;
         }
     });
     geoLay.addTo(map);
+    let limits = [Math.min(relativeChange), avg, Math.max(relativeChange)];
+    let colors = ['#ff0000', '#000000', '#00ff00'];
+    let legend = L.control({position: 'bottomright'});
+    legend.onAdd = function() {
+        //create div
+        let div = L.DomUtil.create("div", "info legend");
+        let labels = [];
+
+        // create min/max
+        let legendInfo = "<h2>Color by Change #</h2>" +
+        "<div class=\"labels\">" +
+          "<div class=\"min\">" + limits[0] + "</div>" +
+          "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
+        "</div>";
+        div.innerHTML = legendInfo;
+
+        limits.forEach(function(limit, index) {
+            labels.push("<li style=\"background-color: " + colors[index] + "\"></li>");
+        });
+        div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+        return div;
+    };
+    legend.addTo(map);
 });
 });
 
