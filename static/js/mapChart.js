@@ -89,7 +89,7 @@ let geoLay;
           colorI = '#400000';
         }else if (relativeChange[i] < avg) {
           colorI = '#ff0000';
-        }else if (relativeChange[i] < Math.min) {
+        }else if (relativeChange[i] < Math.min(relativeChange)) {
           colorI = '#00ff00';
         }else{
           colorI = '#006400';
@@ -115,6 +115,128 @@ let geoLay;
     geoLay.addTo(map);
 });
 });
+}
+
+// ==========================================================================================================
+// =====================================REFRESHED DATA MAP======================================
+// ==========================================================================================================
+
+function newmap(yearFilter, dataFilter, baseFilter, regionFilter) {
+
+  var xData = [];
+  var yData = [];
+  var comp = [];
+  var baseYData = [];
+  var baseComp = [];
+  let colorsObj = {};
+//   // // @TODO: Use `d3.json` to fetch the sample data for the plots
+ var url = regionFilter[0]
+ d3.json(url).then(function(response) {
+   var yearInfo = response[yearFilter]
+   var dataKeys = Object.keys(yearInfo)
+   var dataValues = Object.values(yearInfo)
+
+   // loops over the selected year to populate the data
+   for (var j = 0; j < dataKeys.length; j++) {
+    yData
+     .push(dataValues[j][dataFilter])
+    comp
+     .push(dataValues[j][compareFilter])
+    xData
+     .push(dataKeys[j])
+   }
+
+   d3.json(url).then(function(response) {
+    var yearInfo = response[baseFilter]
+    var dataKeys = Object.keys(yearInfo)
+    var dataValues = Object.values(yearInfo)
+
+    // loops over the selected year to populate the data
+    for (var j = 0; j < dataKeys.length; j++) {
+     baseYData
+      .push(dataValues[j][dataFilter])
+     baseComp
+      .push(dataValues[j][compareFilter])
+    }
+// ============================================================
+// HERE IS THE CALCULATION AND MAPPING YOU ARE LOOKING FOR!!!!!    
+// makes the data comparison Chart
+// ============================================================
+var relativeChange = [];
+for (var j = 0; j < dataKeys.length; j++) {
+  relativeChange.push(((yData[j] / baseYData[j])-1));
+ }
+
+
+// let map = L.map("chart", {
+//     center: [39.8283, -98.5795],
+//     zoom: 4
+// });
+
+// // adding tile layer
+// L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={key}", {
+//     id: "mapbox.streets",
+//     key: API_KEY
+// }).addTo(map);
+
+// placeholder for coloring function
+//function chooseColor(state) {
+//  CODE
+//}
+
+// create popup function
+let getPopup = function(feature, layer) {
+    let content = `<h1>${feature.properties.NAME}</h1>`;
+    layer.bindPopup(content);
+}
+function getColor(feature) {
+  // console.log(colorsObj[0]);
+  return colorsObj[feature.properties.NAME];
+}
+var total = 0;
+for (let i = 0; i < relativeChange.length; i++) {
+  total += relativeChange[i]
+}
+var avg = total / relativeChange.length;
+
+// holds geoJSON layer
+let geoLay;
+// function to 
+// get geoJSON file (stateboarder.json = stateBorders) and lay out Leaflet map
+    //  console.log('running updateC');
+      for (let i = 0; i < relativeChange.length; i++) {
+        let colorI;
+        if (relativeChange[i] < Math.max(relativeChange)) {
+          colorI = '#400000';
+        }else if (relativeChange[i] < avg) {
+          colorI = '#ff0000';
+        }else if (relativeChange[i] < Math.min(relativeChange)) {
+          colorI = '#00ff00';
+        }else{
+          colorI = '#006400';
+        }
+        colorsObj[xData[i]] = colorI;
+      }
+    if (geoLay) {
+        map.removeLayer(geoLay);
+    }
+    geoLay = L.geoJSON(stateBorders, {
+        style: function(feature) {
+            return {
+                color: "#000000",
+                fillColor: getColor(feature),
+                fillOpacity: 0.4,
+                weight: 2.5
+            };
+        },
+        onEachFeature: function(feature, layer) {
+            getPopup(feature, layer);
+        }
+    });
+    geoLay.addTo(map);
+});
+});
+
 }
 
 
@@ -164,8 +286,7 @@ let dataFilter = ["GDP (millions of dollars)"];
 let baseFilter = [1997];
 let regionFilter = ['/api/get_state'];
 let compareFilter = ["GDP (millions of dollars)"];
-let comp;
-let xData;
+
 
 
 //  onChange functions
@@ -175,7 +296,7 @@ function optionChanged(newYear) {
     if (filterLength >= 2) {
       yearFilter.shift();
     }
-    secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+    newmap(yearFilter, dataFilter, baseFilter, regionFilter);
 }
 function dataChanged(newData) {
     dataFilter.push(newData)
@@ -183,7 +304,7 @@ function dataChanged(newData) {
     if (filterLength >= 2) {
       dataFilter.shift();
     }
-    secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+    newmap(yearFilter, dataFilter, baseFilter, regionFilter);
 }
 function baseChanged(newBase) {
     baseFilter.push(newBase)
@@ -191,7 +312,7 @@ function baseChanged(newBase) {
     if (filterLength >= 2) {
       baseFilter.shift();
     }
-    secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+    newmap(yearFilter, dataFilter, baseFilter, regionFilter);
 }
 function regionChanged(newRegion) {
     regionFilter.push(newRegion)
@@ -199,7 +320,7 @@ function regionChanged(newRegion) {
     if (filterLength >= 2) {
       regionFilter.shift();
     }
-    secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+    newmap(yearFilter, dataFilter, baseFilter, regionFilter);
 }
 
 
