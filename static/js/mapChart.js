@@ -125,8 +125,8 @@ let geoLay;
         // create min/max
         let legendInfo = "<h2>Color by Change #</h2>" +
         "<div class=\"labels\">" +
-          "<div class=\"min\">" + limits[0] + "</div>" +
-          "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
+          "<div class=\"min\">" + 'Below Average' + "</div>" +
+          "<div class=\"max\">" + 'Above Average' + "</div>" +
         "</div>";
         div.innerHTML = legendInfo;
 
@@ -279,8 +279,8 @@ let geoLay;
         // create min/max
         let legendInfo = "<h2>Color by Change #</h2>" +
         "<div class=\"labels\">" +
-          "<div class=\"min\">" + limits[0] + "</div>" +
-          "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
+          "<div class=\"min\">" + 'Below Average' + "</div>" +
+          "<div class=\"max\">" + 'Above Average' + "</div>" +
         "</div>";
         div.innerHTML = legendInfo;
 
