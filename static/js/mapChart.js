@@ -184,11 +184,7 @@ for (var j = 0; j < dataKeys.length; j++) {
 //     zoom: 4
 // });
 
-// // adding tile layer
-// L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={key}", {
-//     id: "mapbox.streets",
-//     key: API_KEY
-// }).addTo(map);
+
 
 // placeholder for coloring function
 //function chooseColor(state) {
@@ -232,6 +228,11 @@ let geoLay;
       center: [39.8283, -98.5795],
       zoom: 4
     });
+    // adding tile layer
+    L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={key}", {
+    id: "mapbox.streets",
+    key: API_KEY
+    }).addTo(map);
     geoLay = L.geoJSON(stateBorders, {
         style: function(feature) {
             return {
