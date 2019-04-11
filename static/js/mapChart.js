@@ -22,11 +22,12 @@ let getPopup = function(feature, layer) {
     layer.bindPopup(content);
 }
 
+
 // holds geoJSON layer
 let geoLay;
 // function to 
 // get geoJSON file (stateboarder.json = stateBorders) and lay out Leaflet map
-function setMap(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter) {
+function setMap(yearFilter, dataFilter, baseFilter, regionFilter) {
     if (geoLay) {
         map.removeLayer(geoLay);
     }
@@ -34,7 +35,7 @@ function setMap(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter)
         style: function(feature) {
             return {
                 color: "#000000",
-                fillColor: getColor(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter),
+                fillColor: getColor(yearFilter, dataFilter, baseFilter, regionFilter),
                 fillOpacity: 0.4,
                 weight: 2.5
             };
@@ -46,6 +47,61 @@ function setMap(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter)
     geoLay.addTo(map);
 }
 
+function secondChart(yearFilter, dataFilter, baseFilter, regionFilter) {
+
+  var xData = [];
+  var yData = [];
+  var comp = [];
+  var baseYData = [];
+  var baseComp = [];
+//   // // @TODO: Use `d3.json` to fetch the sample data for the plots
+ var url = regionFilter[0]
+ d3.json(url).then(function(response) {
+   var yearInfo = response[yearFilter]
+   var dataKeys = Object.keys(yearInfo)
+   var dataValues = Object.values(yearInfo)
+
+   // loops over the selected year to populate the data
+   for (var j = 0; j < dataKeys.length; j++) {
+    yData
+     .push(dataValues[j][dataFilter])
+    comp
+     .push(dataValues[j][compareFilter])
+    xData
+     .push(dataKeys[j])
+   }
+
+   d3.json(url).then(function(response) {
+    var yearInfo = response[baseFilter]
+    var dataKeys = Object.keys(yearInfo)
+    var dataValues = Object.values(yearInfo)
+
+    // loops over the selected year to populate the data
+    for (var j = 0; j < dataKeys.length; j++) {
+     baseYData
+      .push(dataValues[j][dataFilter])
+     baseComp
+      .push(dataValues[j][compareFilter])
+    }
+// ============================================================
+// HERE IS THE CALCULATION AND MAPPING YOU ARE LOOKING FOR!!!!!    
+// makes the data comparison Chart
+// ============================================================
+var relativeChange = [];
+var compChange = [];
+ for (var j = 0; j < dataKeys.length; j++) {
+  relativeChange
+   .push(((yData[j] / baseYData[j])-1))
+  compChange
+   .push(((comp[j] / baseComp[j]) - 1))
+ }
+ console.log(comp)
+ //=============================================================
+ //=============================================================
+ //=============================================================
+});
+});
+}
 // initialization function
 function init() {
     // Grab a reference to the dropdown select element
@@ -68,7 +124,6 @@ function init() {
   
      // populates the list for the different data
      var dataSelector = d3.select('#selData')
-     var comSelector = d3.select('#selComp')
      const year = Object.entries(response[1997]);
        var key = Object.values(year[0])
        var dataNames = Object.keys(key[1])
@@ -77,13 +132,10 @@ function init() {
              .append("option")
              .text(DN)
              .property("value", DN)
-            comSelector
-            .append("option")
-            .text(DN)
-            .property("value", DN)
          });
     });
-    setMap(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter);
+    secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+    setMap(yearFilter, dataFilter, baseFilter, regionFilter);
 }
 
 // ############################################
@@ -102,7 +154,8 @@ function optionChanged(newYear) {
     if (filterLength >= 2) {
       yearFilter.shift();
     }
-    setMap(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter);
+    secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+    setMap(yearFilter, dataFilter, baseFilter, regionFilter);
 }
 function dataChanged(newData) {
     dataFilter.push(newData)
@@ -110,7 +163,8 @@ function dataChanged(newData) {
     if (filterLength >= 2) {
       dataFilter.shift();
     }
-    setMap(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter);
+    secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+    setMap(yearFilter, dataFilter, baseFilter, regionFilter);
 }
 function baseChanged(newBase) {
     baseFilter.push(newBase)
@@ -118,7 +172,8 @@ function baseChanged(newBase) {
     if (filterLength >= 2) {
       baseFilter.shift();
     }
-    setMap(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter);
+    secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+    setMap(yearFilter, dataFilter, baseFilter, regionFilter);
 }
 function regionChanged(newRegion) {
     regionFilter.push(newRegion)
@@ -126,18 +181,13 @@ function regionChanged(newRegion) {
     if (filterLength >= 2) {
       regionFilter.shift();
     }
-    setMap(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter);
-}
-function compChanged(newCompare) {
-    compareFilter.push(newCompare)
-    var filterLength = compareFilter.length
-    if (filterLength >= 2) {
-      compareFilter.shift();
-    }
-    secondChart(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter);
+    secondChart(yearFilter, dataFilter, baseFilter, regionFilter);
+    setMap(yearFilter, dataFilter, baseFilter, regionFilter);
 }
 
 // make the getColor function
 // taken from plotlylogic for comparison chart
 function getColor(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter) {
 }
+
+init();
