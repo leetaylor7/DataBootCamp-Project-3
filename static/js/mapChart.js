@@ -28,6 +28,7 @@ let geoLay;
 // function to 
 // get geoJSON file (stateboarder.json = stateBorders) and lay out Leaflet map
 function setMap(yearFilter, dataFilter, baseFilter, regionFilter) {
+    updateColor();
     if (geoLay) {
         map.removeLayer(geoLay);
     }
@@ -35,7 +36,7 @@ function setMap(yearFilter, dataFilter, baseFilter, regionFilter) {
         style: function(feature) {
             return {
                 color: "#000000",
-                fillColor: getColor(yearFilter, dataFilter, baseFilter, regionFilter),
+                fillColor: getColor(feature),
                 fillOpacity: 0.4,
                 weight: 2.5
             };
@@ -49,9 +50,9 @@ function setMap(yearFilter, dataFilter, baseFilter, regionFilter) {
 
 function secondChart(yearFilter, dataFilter, baseFilter, regionFilter) {
 
-  var xData = [];
+  xData = [];
   var yData = [];
-  var comp = [];
+  comp = [];
   var baseYData = [];
   var baseComp = [];
 //   // // @TODO: Use `d3.json` to fetch the sample data for the plots
@@ -89,11 +90,9 @@ function secondChart(yearFilter, dataFilter, baseFilter, regionFilter) {
 // ============================================================
 var relativeChange = [];
 var compChange = [];
- for (var j = 0; j < dataKeys.length; j++) {
-  relativeChange
-   .push(((yData[j] / baseYData[j])-1))
-  compChange
-   .push(((comp[j] / baseComp[j]) - 1))
+for (var j = 0; j < dataKeys.length; j++) {
+  relativeChange.push(((yData[j] / baseYData[j])-1));
+  compChange.push(((comp[j] / baseComp[j]) - 1));
  }
  console.log(comp)
  console.log(xData)
@@ -148,6 +147,9 @@ let dataFilter = ["GDP (millions of dollars)"];
 let baseFilter = [1997];
 let regionFilter = ['/api/get_state'];
 let compareFilter = ["GDP (millions of dollars)"];
+let comp;
+let xData;
+let colorsObj = {};
 
 //  onChange functions
 function optionChanged(newYear) {
@@ -188,8 +190,41 @@ function regionChanged(newRegion) {
 }
 
 // make the getColor function
-// taken from plotlylogic for comparison chart
-function getColor(yearFilter, dataFilter, baseFilter, regionFilter, compareFilter) {
+// basically this relies on running secondChart first
+// since I believe? that it updates the values we care about
+// I made comp and xData global variables (array type) which should be updated inside secondChart
+
+// basically this will take the feature and check by state name which color it should have
+// there will be a supplemental function below
+function getColor(feature) {
+  console.log(colorsObj);
+  return colorsObj[feature.properties.NAME];
+}
+
+/* #############################################
+################################################
+#####  MAKE SURE TO RUN updateColor()  BEFORE ##
+################################################
+############################################# */
+
+// supplemental function to update the colorsObj
+// stores state names as keys, colors as values
+// relies on recently running secondChart to have up-to-date [comp, xData]   (#, name)
+function updateColor() {
+//  console.log('running updateC');
+  for (let i = 0; i < comp.length; i++) {
+    let colorI;
+    if (comp[i] < -50000) {
+      colorI = '#400000';
+    }else if (comp[i] < 0) {
+      colorI = '#ff0000';
+    }else if (comp[i] < 50000) {
+      colorI = '#00ff00';
+    }else{
+      colorI = '#006400';
+    }
+    colorsObj[xData[i]] = colorI;
+  }
 }
 
 init();
